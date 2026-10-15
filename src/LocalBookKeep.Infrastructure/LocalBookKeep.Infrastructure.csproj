@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- 基础设施层：EF Core + SQLite 持久化、仓储实现、MiniExcel 导出、数据库备份 -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>LocalBookKeep.Infrastructure</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LocalBookKeep.Domain\LocalBookKeep.Domain.csproj" />
+    <ProjectReference Include="..\LocalBookKeep.Application\LocalBookKeep.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.9" />
+    <PackageReference Include="MiniExcel" Version="1.46.0" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="src/LocalBookKeep.Domain/LocalBookKeep.Domain.csproj" />
+  <Project Path="src/LocalBookKeep.Application/LocalBookKeep.Application.csproj" />
+  <Project Path="src/LocalBookKeep.Infrastructure/LocalBookKeep.Infrastructure.csproj" />
+  <Project Path="src/LocalBookKeep.Desktop/LocalBookKeep.Desktop.csproj" />
+  <Project Path="tests/LocalBookKeep.Tests/LocalBookKeep.Tests.csproj" />
+</Solution>

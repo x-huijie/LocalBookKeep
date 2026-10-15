@@ -1,0 +1,113 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:LocalBookKeep.ViewModels"
+        xmlns:dto="using:LocalBookKeep.Application.Dtos"
+        xmlns:controls="using:LocalBookKeep.Views.Controls"
+        xmlns:converters="using:Avalonia.Data.Converters"
+        x:Class="LocalBookKeep.Views.AccountManagerWindow"
+        x:DataType="vm:AccountManagerViewModel"
+        Width="500"
+        Height="620"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource PageBrush}"
+        Title="账户管理">
+
+    <Window.Styles>
+        <Style Selector="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="14,10" />
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <Border Grid.Row="0" Background="{StaticResource AccentBrush}" Padding="20,16">
+            <StackPanel Spacing="3">
+                <TextBlock Text="账户管理" FontSize="17" FontWeight="Bold" Foreground="White" />
+                <TextBlock Text="当前余额 = 期初余额 + 全部收入 - 全部支出"
+                           FontSize="12" Foreground="#D6E1FF" />
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,*" Margin="20,16,20,0" RowSpacing="12">
+
+            <Border Grid.Row="0" Classes="stat balance">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <TextBlock Grid.Column="0" Classes="cardLabel" Text="账户余额合计（元）" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="2" Classes="cardValue" FontSize="20"
+                               Foreground="{StaticResource AccentDarkBrush}"
+                               Text="{Binding TotalBalanceText}" />
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="1" ColumnDefinitions="*,140" ColumnSpacing="10">
+                <TextBox Grid.Column="0" Text="{Binding NameInput, Mode=TwoWay}" MaxLength="20"
+                         PlaceholderText="账户名称，如：信用卡" />
+                <controls:AmountTextBox Grid.Column="1" Text="{Binding InitialBalanceInput, Mode=TwoWay}"
+                                        PlaceholderText="期初余额"
+                                        HorizontalContentAlignment="Right" />
+            </Grid>
+
+            <TextBlock Grid.Row="2" Classes="cardLabel"
+                       Text="选中下方账户可修改名称与期初余额；内置账户不可删除" />
+
+            <Border Grid.Row="3" Classes="card" Padding="0">
+                <Grid RowDefinitions="Auto,*">
+                    <Border Grid.Row="0"
+                            Background="#F8FAFD"
+                            BorderBrush="{StaticResource LineBrush}"
+                            BorderThickness="0,0,0,1"
+                            Padding="14,10">
+                        <Grid ColumnDefinitions="*,100,120">
+                            <TextBlock Grid.Column="0" Classes="listHeader" Text="账户" />
+                            <TextBlock Grid.Column="1" Classes="listHeader" Text="期初余额" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Column="2" Classes="listHeader" Text="当前余额" HorizontalAlignment="Right" />
+                        </Grid>
+                    </Border>
+
+                    <ListBox Grid.Row="1"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             ItemsSource="{Binding Accounts}"
+                             SelectedItem="{Binding SelectedAccount, Mode=TwoWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="dto:AccountDto">
+                                <Grid ColumnDefinitions="*,100,120">
+                                    <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="7" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                                        <Border CornerRadius="4" Background="#F0F3F8" Padding="6,2"
+                                                VerticalAlignment="Center"
+                                                IsVisible="{Binding IsBuiltIn}">
+                                            <TextBlock Text="内置" FontSize="11" Foreground="{StaticResource MutedBrush}" />
+                                        </Border>
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="1" Text="{Binding InitialBalance, StringFormat='{}{0:N2}'}"
+                                               Foreground="{StaticResource MutedBrush}"
+                                               HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="2" Text="{Binding CurrentBalance, StringFormat='{}{0:N2}'}"
+                                               FontWeight="SemiBold"
+                                               HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Spacing="10" Margin="20">
+            <TextBlock Classes="error"
+                       Text="{Binding ErrorMessage}"
+                       IsVisible="{Binding ErrorMessage, Converter={x:Static converters:ObjectConverters.IsNotNull}}" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                <Button Classes="tool" Content="新增" Command="{Binding CreateCommand}" />
+                <Button Classes="tool" Content="保存修改" Command="{Binding SaveCommand}" />
+                <Button Classes="tool" Content="删除选中" Command="{Binding DeleteCommand}" />
+                <Button Classes="accent" Content="关闭" Command="{Binding CloseCommand}" />
+            </StackPanel>
+        </StackPanel>
+
+    </Grid>
+
+</Window>

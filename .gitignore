@@ -1,0 +1,27 @@
+# .NET 编译输出
+bin/
+obj/
+.vs/
+publish/
+
+# SQLite数据库文件（不要上传账本数据！！）
+*.db
+*.db-shm
+*.db-wal
+
+# 日志
+*.log
+
+# 用户配置
+*.user
+*.suo
+
+# Avalonia
+.avalonia/
+
+# 测试临时文件
+TestResults/
+
+# IDE
+.idea/
+.vscode/

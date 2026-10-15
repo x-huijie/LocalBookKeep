@@ -1,0 +1,204 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:LocalBookKeep.ViewModels"
+        x:Class="LocalBookKeep.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Width="1160"
+        Height="780"
+        MinWidth="980"
+        MinHeight="620"
+        Background="{StaticResource PageBrush}"
+        Title="本地记账 LocalBookKeep">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="22" RowSpacing="14">
+
+        <!-- 顶部：月度汇总 -->
+        <Grid Grid.Row="0" ColumnDefinitions="240,*,*,*" ColumnSpacing="14">
+
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="6">
+                <StackPanel Orientation="Horizontal" Spacing="9">
+                    <Border Width="28" Height="28" CornerRadius="9"
+                            Background="{StaticResource AccentBrush}" VerticalAlignment="Center">
+                        <TextBlock Text="记" Foreground="White" FontWeight="Bold" FontSize="14"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <TextBlock Classes="h1" Text="本地记账" VerticalAlignment="Center" />
+                </StackPanel>
+                <TextBlock Classes="cardLabel" Text="{Binding PeriodTitle}" Margin="37,0,0,0" />
+            </StackPanel>
+
+            <Border Grid.Column="1" Classes="stat income">
+                <Grid ColumnDefinitions="4,*" ColumnSpacing="14">
+                    <Border Grid.Column="0" Width="4" CornerRadius="2" Background="{StaticResource IncomeBrush}" />
+                    <StackPanel Grid.Column="1" Spacing="5">
+                        <TextBlock Classes="cardLabel" Text="本月收入（元）" />
+                        <TextBlock Classes="cardValue income" Text="{Binding TotalIncomeText}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="2" Classes="stat expense">
+                <Grid ColumnDefinitions="4,*" ColumnSpacing="14">
+                    <Border Grid.Column="0" Width="4" CornerRadius="2" Background="{StaticResource ExpenseBrush}" />
+                    <StackPanel Grid.Column="1" Spacing="5">
+                        <TextBlock Classes="cardLabel" Text="本月支出（元）" />
+                        <TextBlock Classes="cardValue expense" Text="{Binding TotalExpenseText}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="3" Classes="stat balance">
+                <Grid ColumnDefinitions="4,*" ColumnSpacing="14">
+                    <Border Grid.Column="0" Width="4" CornerRadius="2" Background="{StaticResource AccentBrush}" />
+                    <StackPanel Grid.Column="1" Spacing="5">
+                        <TextBlock Classes="cardLabel" Text="本月结余（元）" />
+                        <TextBlock Classes="cardValue"
+                                   Text="{Binding BalanceText}"
+                                   Classes.income="{Binding !IsBalanceNegative}"
+                                   Classes.expense="{Binding IsBalanceNegative}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- 筛选与操作 -->
+        <Border Grid.Row="1" Classes="card" Padding="12">
+            <Grid RowDefinitions="Auto,Auto" RowSpacing="10">
+
+                <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,*,Auto,Auto" ColumnSpacing="10">
+                    <ComboBox Grid.Column="0"
+                              Width="140"
+                              ItemsSource="{Binding Months}"
+                              SelectedItem="{Binding SelectedMonth, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:MonthOption">
+                                <TextBlock Text="{Binding Label}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <TextBox Grid.Column="1"
+                             Width="260"
+                             PlaceholderText="按备注搜索，如：加油"
+                             Text="{Binding SearchKeyword, Mode=TwoWay}" />
+
+                    <Button Grid.Column="3" Classes="tool" Content="刷新"
+                            Command="{Binding ReloadCommand}" />
+
+                    <Button Grid.Column="4" Classes="accent" Content="＋ 新增账单"
+                            Command="{Binding AddTransactionCommand}" />
+                </Grid>
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+                    <Button Classes="tool" Content="分类管理" Command="{Binding ManageCategoriesCommand}" />
+                    <Button Classes="tool" Content="账户管理" Command="{Binding ManageAccountsCommand}" />
+                    <Button Classes="tool" Content="导出 CSV" Command="{Binding ExportCsvCommand}" />
+                    <Button Classes="tool" Content="备份数据库" Command="{Binding BackupDatabaseCommand}" />
+                    <Button Classes="tool" Content="恢复备份" Command="{Binding RestoreDatabaseCommand}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 账单流水 -->
+        <Border Grid.Row="2" Classes="card" Padding="0">
+            <Grid RowDefinitions="Auto,Auto,*">
+
+                <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="16,14,16,10">
+                    <TextBlock Grid.Column="0" Classes="sectionTitle" Text="账单流水" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1" Classes="cardLabel" VerticalAlignment="Center"
+                               Text="按时间倒序 · 双击某行可编辑" />
+                </Grid>
+
+                <Border Grid.Row="1"
+                        Background="#F8FAFD"
+                        BorderBrush="{StaticResource LineBrush}"
+                        BorderThickness="0,1,0,1"
+                        Padding="14,10">
+                    <Grid ColumnDefinitions="140,56,120,100,100,*,130">
+                        <TextBlock Grid.Column="0" Classes="listHeader" Text="日期" />
+                        <TextBlock Grid.Column="1" Classes="listHeader" Text="类型" />
+                        <TextBlock Grid.Column="2" Classes="listHeader" Text="金额（元）" HorizontalAlignment="Right" />
+                        <TextBlock Grid.Column="3" Classes="listHeader" Text="分类" Margin="14,0,0,0" />
+                        <TextBlock Grid.Column="4" Classes="listHeader" Text="账户" />
+                        <TextBlock Grid.Column="5" Classes="listHeader" Text="备注" />
+                        <TextBlock Grid.Column="6" Classes="listHeader" Text="操作" HorizontalAlignment="Center" />
+                    </Grid>
+                </Border>
+
+                <Grid Grid.Row="2">
+                    <ListBox Padding="0"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             ItemsSource="{Binding Transactions}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:TransactionListItemViewModel">
+                                <Border BorderBrush="#F1F4F9"
+                                        BorderThickness="0,0,0,1"
+                                        Background="Transparent"
+                                        DoubleTapped="OnRowDoubleTapped">
+                                    <Grid ColumnDefinitions="140,56,120,100,100,*,130" VerticalAlignment="Center">
+                                        <TextBlock Grid.Column="0" Text="{Binding DateText}" VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="1" Text="{Binding TypeText}" VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="2"
+                                                   Text="{Binding AmountText}"
+                                                   FontWeight="SemiBold"
+                                                   FontSize="14"
+                                                   HorizontalAlignment="Right"
+                                                   VerticalAlignment="Center"
+                                                   Classes.income="{Binding IsIncome}"
+                                                   Classes.expense="{Binding IsExpense}" />
+                                        <TextBlock Grid.Column="3" Text="{Binding CategoryName}"
+                                                   Margin="14,0,0,0" VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="4" Text="{Binding AccountName}" VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="5" Text="{Binding RemarkText}"
+                                                   TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                        <StackPanel Grid.Column="6" Orientation="Horizontal" Spacing="2"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Button Classes="link" Content="编辑"
+                                                    Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).EditTransactionCommand}"
+                                                    CommandParameter="{Binding}" />
+                                            <Button Classes="link" Content="删除"
+                                                    Foreground="{StaticResource ExpenseBrush}"
+                                                    Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).DeleteTransactionCommand}"
+                                                    CommandParameter="{Binding}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8"
+                                IsVisible="{Binding !HasTransactions}">
+                        <Border Width="52" Height="52" CornerRadius="26"
+                                Background="#EEF3FE" HorizontalAlignment="Center">
+                            <TextBlock Text="账" FontSize="20" FontWeight="Bold"
+                                       Foreground="{StaticResource AccentBrush}"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="当前筛选条件下还没有账单"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{StaticResource TextBrush}" />
+                        <TextBlock Text="点击右上角「＋ 新增账单」记下第一笔"
+                                   Classes="cardLabel"
+                                   HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- 状态栏 -->
+        <Border Grid.Row="3" Classes="card" Padding="14,8">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                <TextBlock Grid.Column="0" Classes="cardLabel"
+                           TextTrimming="CharacterEllipsis"
+                           VerticalAlignment="Center"
+                           Text="{Binding StatusText}" />
+                <TextBlock Grid.Column="1" Classes="cardLabel" VerticalAlignment="Center"
+                           Text="本地 SQLite 存储 · 随时可备份" />
+            </Grid>
+        </Border>
+    </Grid>
+
+</Window>

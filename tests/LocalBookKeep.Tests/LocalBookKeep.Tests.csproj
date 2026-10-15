@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- 测试项目：覆盖应用层用例与基础设施层（EF Core / MiniExcel / 备份） -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>LocalBookKeep.Tests</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\LocalBookKeep.Domain\LocalBookKeep.Domain.csproj" />
+    <ProjectReference Include="..\..\src\LocalBookKeep.Application\LocalBookKeep.Application.csproj" />
+    <ProjectReference Include="..\..\src\LocalBookKeep.Infrastructure\LocalBookKeep.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

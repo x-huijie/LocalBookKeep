@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- 领域层：只包含实体、枚举、仓储契约，不依赖任何第三方框架 -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>LocalBookKeep.Domain</RootNamespace>
+  </PropertyGroup>
+
+</Project>

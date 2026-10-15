@@ -1,0 +1,140 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="LocalBookKeep.App"
+             xmlns:local="using:LocalBookKeep"
+             RequestedThemeVariant="Light">
+
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+
+    <Application.Resources>
+        <!-- 品牌与文本 -->
+        <SolidColorBrush x:Key="AccentBrush" Color="#2F6BFF" />
+        <SolidColorBrush x:Key="AccentDarkBrush" Color="#1F4FD8" />
+        <SolidColorBrush x:Key="PageBrush" Color="#F4F6FB" />
+        <SolidColorBrush x:Key="CardBrush" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="LineBrush" Color="#E4E9F2" />
+        <SolidColorBrush x:Key="MutedBrush" Color="#7B8794" />
+        <SolidColorBrush x:Key="TextBrush" Color="#1F2937" />
+
+        <!-- 收入 / 支出 / 结余 主题色 -->
+        <SolidColorBrush x:Key="IncomeBrush" Color="#12864A" />
+        <SolidColorBrush x:Key="IncomeBgBrush" Color="#F0FAF4" />
+        <SolidColorBrush x:Key="IncomeLineBrush" Color="#CDEBDC" />
+        <SolidColorBrush x:Key="ExpenseBrush" Color="#CE3B3B" />
+        <SolidColorBrush x:Key="ExpenseBgBrush" Color="#FEF4F4" />
+        <SolidColorBrush x:Key="ExpenseLineBrush" Color="#F6D9D9" />
+        <SolidColorBrush x:Key="BalanceBgBrush" Color="#F2F6FF" />
+        <SolidColorBrush x:Key="BalanceLineBrush" Color="#D9E3FB" />
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+
+        <Style Selector="TextBlock.h1">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+        </Style>
+
+        <Style Selector="TextBlock.sectionTitle">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+        </Style>
+
+        <Style Selector="TextBlock.cardLabel">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+        </Style>
+
+        <Style Selector="TextBlock.cardValue">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+
+        <Style Selector="TextBlock.income">
+            <Setter Property="Foreground" Value="{StaticResource IncomeBrush}" />
+        </Style>
+
+        <Style Selector="TextBlock.expense">
+            <Setter Property="Foreground" Value="{StaticResource ExpenseBrush}" />
+        </Style>
+
+        <Style Selector="TextBlock.listHeader">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+        </Style>
+
+        <Style Selector="TextBlock.error">
+            <Setter Property="Foreground" Value="{StaticResource ExpenseBrush}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+
+        <!-- 卡片 -->
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="{StaticResource CardBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource LineBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="16" />
+        </Style>
+
+        <Style Selector="Border.stat">
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="18,14" />
+        </Style>
+
+        <Style Selector="Border.stat.income">
+            <Setter Property="Background" Value="{StaticResource IncomeBgBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource IncomeLineBrush}" />
+        </Style>
+
+        <Style Selector="Border.stat.expense">
+            <Setter Property="Background" Value="{StaticResource ExpenseBgBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource ExpenseLineBrush}" />
+        </Style>
+
+        <Style Selector="Border.stat.balance">
+            <Setter Property="Background" Value="{StaticResource BalanceBgBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BalanceLineBrush}" />
+        </Style>
+
+        <!-- 按钮 -->
+        <Style Selector="Button.tool">
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="14,7" />
+            <Setter Property="FontSize" Value="13" />
+        </Style>
+
+        <Style Selector="Button.accent">
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="16,7" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+        <Style Selector="Button.link">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Foreground" Value="{StaticResource AccentBrush}" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+
+        <Style Selector="Button.link:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#EAF0FF" />
+        </Style>
+
+        <!-- 表格行 -->
+        <Style Selector="ListBoxItem">
+            <Setter Property="Padding" Value="14,10" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+    </Application.Styles>
+
+</Application>

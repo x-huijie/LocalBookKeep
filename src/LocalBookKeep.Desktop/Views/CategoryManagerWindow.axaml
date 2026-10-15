@@ -1,0 +1,78 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:LocalBookKeep.ViewModels"
+        xmlns:dto="using:LocalBookKeep.Application.Dtos"
+        xmlns:converters="using:Avalonia.Data.Converters"
+        x:Class="LocalBookKeep.Views.CategoryManagerWindow"
+        x:DataType="vm:CategoryManagerViewModel"
+        Width="440"
+        Height="580"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource PageBrush}"
+        Title="分类管理">
+
+    <Window.Styles>
+        <Style Selector="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <Border Grid.Row="0" Background="{StaticResource AccentBrush}" Padding="20,16">
+            <StackPanel Spacing="3">
+                <TextBlock Text="分类管理" FontSize="17" FontWeight="Bold" Foreground="White" />
+                <TextBlock Text="收入分类与支出分类相互独立，内置分类可改名不可删除"
+                           FontSize="12" Foreground="#D6E1FF" />
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="1" RowDefinitions="Auto,*,Auto" Margin="20,16,20,0" RowSpacing="12">
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="22">
+                <RadioButton GroupName="CategoryType" Content="支出分类"
+                             IsChecked="{Binding IsExpense, Mode=TwoWay}" />
+                <RadioButton GroupName="CategoryType" Content="收入分类"
+                             IsChecked="{Binding IsIncome, Mode=TwoWay}" />
+            </StackPanel>
+
+            <Border Grid.Row="1" Classes="card" Padding="0">
+                <ListBox Background="Transparent"
+                         BorderThickness="0"
+                         ItemsSource="{Binding Categories}"
+                         SelectedItem="{Binding SelectedCategory, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="dto:CategoryDto">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center" />
+                                <Border Grid.Column="1" CornerRadius="4" Background="#F0F3F8" Padding="6,2"
+                                        VerticalAlignment="Center"
+                                        IsVisible="{Binding IsBuiltIn}">
+                                    <TextBlock Text="内置" FontSize="11" Foreground="{StaticResource MutedBrush}" />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+
+            <StackPanel Grid.Row="2" Spacing="7">
+                <TextBlock Classes="cardLabel" Text="分类名称（选中列表中的分类即可改名）" />
+                <TextBox Text="{Binding NameInput, Mode=TwoWay}" MaxLength="20" PlaceholderText="如：宠物、话费" />
+                <TextBlock Classes="error"
+                           Text="{Binding ErrorMessage}"
+                           IsVisible="{Binding ErrorMessage, Converter={x:Static converters:ObjectConverters.IsNotNull}}" />
+            </StackPanel>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="20">
+            <Button Classes="tool" Content="新增" Command="{Binding CreateCommand}" />
+            <Button Classes="tool" Content="保存修改" Command="{Binding RenameCommand}" />
+            <Button Classes="tool" Content="删除选中" Command="{Binding DeleteCommand}" />
+            <Button Classes="accent" Content="关闭" Command="{Binding CloseCommand}" />
+        </StackPanel>
+
+    </Grid>
+
+</Window>

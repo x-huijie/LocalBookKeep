@@ -1,0 +1,27 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="LocalBookKeep.Views.MessageWindow"
+        Width="470"
+        SizeToContent="Height"
+        CanResize="False"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource PageBrush}"
+        Title="提示">
+
+    <StackPanel>
+        <Border Background="{StaticResource AccentBrush}" Padding="20,14">
+            <TextBlock x:Name="TitleText" FontSize="16" FontWeight="Bold" Foreground="White" Text="提示" />
+        </Border>
+
+        <StackPanel Margin="20" Spacing="18">
+            <TextBlock x:Name="MessageText" TextWrapping="Wrap" FontSize="13" LineHeight="21" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                <Button x:Name="CancelButton" Classes="tool" Content="取消" />
+                <Button x:Name="ConfirmButton" Classes="accent" Content="确定" />
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+
+</Window>

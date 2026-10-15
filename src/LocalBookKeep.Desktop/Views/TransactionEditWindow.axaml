@@ -1,0 +1,99 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:LocalBookKeep.ViewModels"
+        xmlns:dto="using:LocalBookKeep.Application.Dtos"
+        xmlns:controls="using:LocalBookKeep.Views.Controls"
+        xmlns:converters="using:Avalonia.Data.Converters"
+        x:Class="LocalBookKeep.Views.TransactionEditWindow"
+        x:DataType="vm:TransactionEditViewModel"
+        Width="440"
+        SizeToContent="Height"
+        CanResize="False"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource PageBrush}"
+        Title="{Binding Title}">
+
+    <StackPanel>
+
+        <Border Background="{StaticResource AccentBrush}" Padding="20,16">
+            <StackPanel Spacing="3">
+                <TextBlock Text="{Binding Title}" FontSize="17" FontWeight="Bold" Foreground="White" />
+                <TextBlock Text="金额必填，其余可选" FontSize="12" Foreground="#D6E1FF" />
+            </StackPanel>
+        </Border>
+
+        <StackPanel Margin="20" Spacing="14">
+
+            <StackPanel Orientation="Horizontal" Spacing="22">
+                <RadioButton GroupName="TransactionType" Content="支出"
+                             IsChecked="{Binding IsExpense, Mode=TwoWay}" />
+                <RadioButton GroupName="TransactionType" Content="收入"
+                             IsChecked="{Binding IsIncome, Mode=TwoWay}" />
+            </StackPanel>
+
+            <Border Classes="card" Padding="16">
+                <StackPanel Spacing="14">
+
+                    <StackPanel Spacing="5">
+                        <TextBlock Classes="cardLabel" Text="金额（元）" />
+                        <controls:AmountTextBox Text="{Binding AmountText, Mode=TwoWay}"
+                                                PlaceholderText="0.00"
+                                                FontSize="22"
+                                                MinHeight="44"
+                                                HorizontalContentAlignment="Right" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="5">
+                        <TextBlock Classes="cardLabel" Text="分类" />
+                        <ComboBox ItemsSource="{Binding AvailableCategories}"
+                                  SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                                  HorizontalAlignment="Stretch">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="dto:CategoryDto">
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Spacing="5">
+                        <TextBlock Classes="cardLabel" Text="账户" />
+                        <ComboBox ItemsSource="{Binding Accounts}"
+                                  SelectedItem="{Binding SelectedAccount, Mode=TwoWay}"
+                                  HorizontalAlignment="Stretch">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="dto:AccountDto">
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Spacing="5">
+                        <TextBlock Classes="cardLabel" Text="发生日期（可选过去日期）" />
+                        <DatePicker SelectedDate="{Binding OccurredOn, Mode=TwoWay}"
+                                    HorizontalAlignment="Stretch" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="5">
+                        <TextBlock Classes="cardLabel" Text="备注（可选）" />
+                        <TextBox Text="{Binding Remark, Mode=TwoWay}"
+                                 PlaceholderText="如：晚饭、加油"
+                                 MaxLength="200" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="error"
+                       Text="{Binding ErrorMessage}"
+                       IsVisible="{Binding ErrorMessage, Converter={x:Static converters:ObjectConverters.IsNotNull}}" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                <Button Classes="tool" Content="取消" Command="{Binding CancelCommand}" />
+                <Button Classes="accent" Content="保存" Command="{Binding SaveCommand}" />
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+
+</Window>
